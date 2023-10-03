@@ -12,6 +12,20 @@ delta = {
     pg.K_RIGHT: (+5, 0)
 }
 
+def check_bound(obj_rct: pg.Rect):
+    """
+    引数：こうかとんRectかばくだんRect
+    戻り値：タプル(横方向判定結果、縦方向判定結果)
+    画面内ならTrue、画面内ならFalse
+    """
+    yoko, tate = True, True
+    if obj_rct.left < 0 or WIDTH < obj_rct.right:
+        yoko = False
+    if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
+        tate = False
+
+    return yoko, tate
+
 
 
 def main():
