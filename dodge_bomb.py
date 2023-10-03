@@ -17,10 +17,6 @@ delta = {  # 練習３：移動量辞書
     pg.K_d: (+5, 0),  # 右
 }
 
-# kk_d = {
-#     pg.K_UP: 
-# }
-
 
 def check_bound(obj_rct: pg.Rect):
     """
@@ -96,7 +92,9 @@ def main():
         """演習2:爆弾の速度の変更処理(経過時間ごとに)"""
         # 時間の経過に応じて移動速度を増やす
         bd_rct.move_ip(vx, vy)  # 練習２：爆弾を移動させる
-    
+        t = pg.time.get_ticks() / 1000 # 時間の取得
+        vx += t
+        vy += t
         yoko, tate = check_bound(bd_rct)
         if not yoko:  # 練習４：横方向にはみ出たら
             vx *= -1
