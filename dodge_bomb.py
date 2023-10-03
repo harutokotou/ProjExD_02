@@ -53,19 +53,8 @@ def main():
     x, y = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     bd_rct.center = (x, y)  # 練習１：Rectにランダムな座標を設定する
     vx, vy = +5, +5  # 練習２：爆弾の速度
-    frame_cnt = pg.time.get_ticks()
-    vx += 1 / frame_cnt
-    vy += 1 /frame_cnt
 
-    if vx > 10:
-        vx = 10
-    if vy > 10:
-        vy = 10
-
-    if not yoko:
-        vx *= -1
-    if not tate:
-        vy *= -1
+   
 
     clock = pg.time.Clock()
     tmr = 0
@@ -76,6 +65,7 @@ def main():
         if kk_rct.colliderect(bd_rct): # 練習5：ぶつかってたら
             print("ゲームオーバー")
             return
+
         
         screen.blit(bg_img, [0, 0])
 
@@ -102,7 +92,11 @@ def main():
         screen.blit(kk_img, kk_rct)  # 練習３：移動後の座標に表示させる
 
         """"ばくだん"""
+
+        """演習2:爆弾の速度の変更処理(経過時間ごとに)"""
+        # 時間の経過に応じて移動速度を増やす
         bd_rct.move_ip(vx, vy)  # 練習２：爆弾を移動させる
+    
         yoko, tate = check_bound(bd_rct)
         if not yoko:  # 練習４：横方向にはみ出たら
             vx *= -1
