@@ -5,14 +5,27 @@ import pygame as pg
 
 WIDTH, HEIGHT = 1600, 900
 
+delta = {
+    pg.K_UP: (0, -5),
+    pg.K_DOWN: (0, +5),
+    pg.K_LEFT: (-5, 0),
+    pg.K_RIGHT: (+5, 0)
+}
+
 
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("/Users/haruto/Desktop/TUT-2後/ProjExD2023/ex02/fig/pg_bg.jpg")
+
+    """"こうかとん"""
     kk_img = pg.image.load("/Users/haruto/Desktop/TUT-2後/ProjExD2023/ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_rct = kk_img.get_rect()
+    kk_rct.center = (900, 400) # 練習3：こうかとんの初期座標
+
+    """ばくだん"""
     bd_img = pg.Surface((20, 20))  # 練習１：爆弾Surfaceを作成する
     bd_img.set_colorkey((0, 0, 0))  # 練習１：黒い部分を透明にする
     pg.draw.circle(bd_img, (255, 0, 0), (10, 10), 10)
@@ -29,9 +42,22 @@ def main():
                 return
 
         screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, [900, 400])
+
+        """こうかとん"""
+        key_lst = pg.key.get_pressed()
+        sum_mv = [0 ,0]
+        for key, mv in delta.items():
+            if key_lst[key]:
+                sum_mv[0] += mv[0] # 練習3:横方向の合計移動量
+                sum_mv[1] += mv[1] # 練習3:縦方向の合計移動量
+        kk_rct.move_ip(sum_mv[0], sum_mv[1])
+        screen.blit(kk_img, kk_rct) # 練習3：Rectを使って試しにblit
+
+        """ばくだん"""
         bd_rct.move_ip(vx, vy)  # 練習２：爆弾を移動させる
         screen.blit(bd_img, bd_rct)  # 練習１：Rectを使って試しにblit
+
+
         pg.display.update()
         tmr += 1
         clock.tick(50)
