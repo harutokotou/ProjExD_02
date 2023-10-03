@@ -11,7 +11,15 @@ delta = {  # 練習３：移動量辞書
     pg.K_DOWN: (0, +5),
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0),
+    pg.K_w: (0, -5),  # 上
+    pg.K_s: (0, +5),  # 下
+    pg.K_a: (-5, 0),  # 左
+    pg.K_d: (+5, 0),  # 右
 }
+
+# kk_d = {
+#     pg.K_UP: 
+# }
 
 
 def check_bound(obj_rct: pg.Rect):
@@ -45,6 +53,19 @@ def main():
     x, y = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     bd_rct.center = (x, y)  # 練習１：Rectにランダムな座標を設定する
     vx, vy = +5, +5  # 練習２：爆弾の速度
+    frame_cnt = pg.time.get_ticks()
+    vx += 1 / frame_cnt
+    vy += 1 /frame_cnt
+
+    if vx > 10:
+        vx = 10
+    if vy > 10:
+        vy = 10
+
+    if not yoko:
+        vx *= -1
+    if not tate:
+        vy *= -1
 
     clock = pg.time.Clock()
     tmr = 0
@@ -59,15 +80,25 @@ def main():
         screen.blit(bg_img, [0, 0])
 
         """こうかとん"""
-        key_lst = pg.key.get_pressed()
+        key_lst = pg.key.get_pressed() # キーボード入力の取得
+        screen.blit(kk_img, kk_rct)
         sum_mv = [0, 0]
         for key, mv in delta.items():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  # 練習３：横方向の合計移動量
                 sum_mv[1] += mv[1]  # 練習３：縦方向の合計移動量
+        screen.blit(kk_img, kk_rct)
+
+
+        
+        # 移動量に応じて画像の向きを変更する
+        # if sum_mv[0] > 0:
+        #     kk_img = pg.transform.rotate(kk_img, 90)
+        # elif sum_mv[0] < 0:
+        #     kk_img = pg.transform.rotate(kk_img, 90)
         kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習３：移動させる
         if check_bound(kk_rct) != (True, True):  # 練習４：はみだし判定
-            kk_rct.move_ip(-sum_mv[0], -sum_mv[1]) 
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)  # 練習３：移動後の座標に表示させる
 
         """"ばくだん"""
